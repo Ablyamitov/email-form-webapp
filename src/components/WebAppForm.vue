@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-
+import { ref, onMounted } from 'vue';
 const email = ref('');
 const useSMTP = ref(false);
 const smtpPassword = ref('');
@@ -9,6 +9,14 @@ const isEmailVerified = ref(false);
 const verificationCode = ref('');
 const showCodeInput = ref(false);
 const url = ref('https://7dad-149-102-241-20.ngrok-free.app');
+
+const chatID = ref(null);
+
+onMounted(() => {
+  if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
+    chatID.value = window.Telegram.WebApp.initDataUnsafe.user.id;
+  } 
+});
 
 // Простая валидация email
 const validateEmail = () => {
