@@ -5,10 +5,11 @@ import WebAppForm from './components/WebAppForm.vue';
 const chatID = ref(null);
 
 onMounted(() => {
-  if (window.Telegram && window.Telegram.WebApp) {
-    const userData = window.Telegram.WebApp.initDataUnsafe;
-    chatID.value = userData?.user?.id || null;
-    alert("Полученный chatID:", chatID.value);
+  if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
+    chatID.value = window.Telegram.WebApp.initDataUnsafe.user.id;
+    alert("Chat ID:", chatID.value);
+  } else {
+    console.warn("Не удалось получить chat_id");
   }
 });
 </script>
