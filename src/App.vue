@@ -7,7 +7,7 @@ const chatID = ref(null);
 onMounted(() => {
   if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
     chatID.value = window.Telegram.WebApp.initDataUnsafe.user.id;
-    alert("Chat ID:", chatID.value);
+    alert("Chat ID:" + chatID.value);
   } else {
     console.warn("Не удалось получить chat_id");
   }
