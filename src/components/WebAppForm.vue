@@ -1,5 +1,4 @@
 <script setup>
-import { ref } from 'vue';
 import { ref, onMounted } from 'vue';
 const email = ref('');
 const useSMTP = ref(false);
