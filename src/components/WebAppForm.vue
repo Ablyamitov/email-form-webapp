@@ -8,6 +8,7 @@ const emailValid = ref(true);
 const isEmailVerified = ref(false);
 const verificationCode = ref('');
 const showCodeInput = ref(false);
+const url = ref('https://7dad-149-102-241-20.ngrok-free.app');
 
 // Простая валидация email
 const validateEmail = () => {
@@ -20,7 +21,7 @@ const sendVerificationCode = async () => {
   if (!emailValid.value) return alert("Введите корректный email!");
 
   try {
-    const response = await fetch("http://localhost:8080/send-code", {
+    const response = await fetch(url.value + "/api/send-code", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: email.value }),
@@ -30,9 +31,11 @@ const sendVerificationCode = async () => {
     if (result.success) {
       showCodeInput.value = true;
       alert("Код отправлен на email!");
-    } else {
-      alert("Ошибка отправки кода");
-    }
+    } else if (result.error)  {
+      alert("Ошибка отправки кода: " + result.error);
+	} else {
+	  alert("Ошибка отправки кода, попробуйте ещё раз");
+	}
   } catch (error) {
     console.error("Ошибка:", error);
     alert("Ошибка подключения к серверу");
@@ -42,7 +45,7 @@ const sendVerificationCode = async () => {
 // Проверка кода на сервере
 const verifyCode = async () => {
   try {
-    const response = await fetch("http://localhost:8080/verify-code", {
+    const response = await fetch(url.value + "/api/verify-code", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: email.value, code: verificationCode.value }),
@@ -52,7 +55,9 @@ const verifyCode = async () => {
     if (result.success) {
       isEmailVerified.value = true;
       alert("Email подтвержден!");
-    } else {
+    } else if (result.error != undefined){
+		alert("Ошибка проверки кода: " + result.error);
+	}else {
       alert("Неверный код!");
     }
   } catch (error) {
@@ -66,13 +71,14 @@ const submitForm = async () => {
   if (!isEmailVerified.value) return alert("Сначала подтвердите email!");
 
   try {
-    const response = await fetch("http://localhost:8080/validate", {
+    const response = await fetch(url.value + "	/api/process-email", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         email: email.value,
         smtp_enabled: useSMTP.value,
-        smtp_password: useSMTP.value ? smtpPassword.value : null
+        smtp_password: useSMTP.value ? smtpPassword.value : null,
+		user_chat_id: chatID.value
       }),
     });
 
