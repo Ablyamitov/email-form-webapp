@@ -71,7 +71,7 @@ const submitForm = async () => {
   if (!isEmailVerified.value) return alert("Сначала подтвердите email!");
 
   try {
-    const response = await fetch(url.value + "	/api/process-email", {
+    const response = await fetch(url.value + "/api/process-email", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
